@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~  Copyright (C) 2017 Bilibili
   ~
   ~  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,11 +16,11 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+   xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/menu_image_item_selected"
-        android:icon="@drawable/shape_boxing_unchecked"
-        android:title=""
-        app:showAsAction="always" />
+   <item
+      android:id="@+id/menu_image_item_selected"
+      android:icon="@drawable/shape_boxing_unchecked"
+      android:title=""
+      app:showAsAction="always" />
 </menu>

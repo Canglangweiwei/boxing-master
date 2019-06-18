@@ -1,20 +1,3 @@
-/*
- *  Copyright (C) 2017 Bilibili
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *          http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
-
 package com.bilibili.boxing.ui;
 
 import android.content.Intent;
@@ -47,6 +30,7 @@ import java.util.List;
  * @author ChenSL
  */
 public class SecondActivity extends AppCompatActivity implements View.OnClickListener {
+
    private FrameLayout mInsideBottomSheet;
    private ImageView mResultImg;
    private BaseMedia mMedia;
@@ -55,11 +39,14 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_second);
+
       createToolbar();
+
       findViewById(R.id.inside_bs_btn).setOnClickListener(this);
-      mResultImg = (ImageView) findViewById(R.id.media_result);
+      mResultImg = findViewById(R.id.media_result);
       mResultImg.setOnClickListener(this);
-      mInsideBottomSheet = (FrameLayout) findViewById(R.id.content_layout);
+      mInsideBottomSheet = findViewById(R.id.content_layout);
+
       BoxingBottomSheetFragment fragment = (BoxingBottomSheetFragment) getSupportFragmentManager().
           findFragmentByTag(BoxingBottomSheetFragment.TAG);
       if (fragment == null) {
@@ -118,9 +105,8 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
       }
    }
 
-
    private void createToolbar() {
-      Toolbar bar = (Toolbar) findViewById(R.id.nav_top_bar);
+      Toolbar bar = findViewById(R.id.nav_top_bar);
       setSupportActionBar(bar);
       getSupportActionBar().setTitle(R.string.second_demo_title);
       bar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -130,5 +116,4 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
          }
       });
    }
-
 }

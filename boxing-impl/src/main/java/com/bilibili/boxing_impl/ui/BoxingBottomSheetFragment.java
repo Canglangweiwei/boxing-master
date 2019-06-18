@@ -52,197 +52,191 @@ import java.util.List;
  * @author ChenSL
  */
 public class BoxingBottomSheetFragment extends AbsBoxingViewFragment implements View.OnClickListener {
-    public static final String TAG = "com.bilibili.boxing_impl.ui.BoxingBottomSheetFragment";
 
-    private static final int GRID_COUNT = 3;
+   public static final String TAG = "com.bilibili.boxing_impl.ui.BoxingBottomSheetFragment";
 
-    private boolean mIsCamera;
+   private static final int GRID_COUNT = 3;
 
-    private BoxingMediaAdapter mMediaAdapter;
-    private ProgressDialog mDialog;
-    private RecyclerView mRecycleView;
-    private TextView mEmptyTxt;
-    private ProgressBar mLoadingView;
+   private boolean mIsCamera;
 
-    public static BoxingBottomSheetFragment newInstance() {
-        return new BoxingBottomSheetFragment();
-    }
+   private BoxingMediaAdapter mMediaAdapter;
+   private ProgressDialog mDialog;
+   private RecyclerView mRecycleView;
+   private TextView mEmptyTxt;
+   private ProgressBar mLoadingView;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mMediaAdapter = new BoxingMediaAdapter(getActivity());
-    }
+   public static BoxingBottomSheetFragment newInstance() {
+      return new BoxingBottomSheetFragment();
+   }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_boxing_bottom_sheet, container, false);
-    }
+   @Override
+   public void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      mMediaAdapter = new BoxingMediaAdapter(getActivity());
+   }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mEmptyTxt = (TextView) view.findViewById(R.id.empty_txt);
-        mRecycleView = (RecyclerView) view.findViewById(R.id.media_recycleview);
-        mRecycleView.setHasFixedSize(true);
-        mLoadingView = (ProgressBar) view.findViewById(R.id.loading);
-        GridLayoutManager gridLayoutManager = new HackyGridLayoutManager(getActivity(), GRID_COUNT);
-        gridLayoutManager.setSmoothScrollbarEnabled(true);
-        mRecycleView.setLayoutManager(gridLayoutManager);
-        mRecycleView.addItemDecoration(new SpacesItemDecoration(getResources().getDimensionPixelOffset(R.dimen.boxing_media_margin), GRID_COUNT));
-        mRecycleView.setAdapter(mMediaAdapter);
-        mRecycleView.addOnScrollListener(new ScrollListener());
-        mMediaAdapter.setOnMediaClickListener(new OnMediaClickListener());
-        mMediaAdapter.setOnCameraClickListener(new OnCameraClickListener());
-        view.findViewById(R.id.finish_txt).setOnClickListener(this);
-    }
+   @Nullable
+   @Override
+   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+      return inflater.inflate(R.layout.fragment_boxing_bottom_sheet, container, false);
+   }
 
+   @Override
+   public void onViewCreated(View view, Bundle savedInstanceState) {
+      super.onViewCreated(view, savedInstanceState);
+      mEmptyTxt = view.findViewById(R.id.empty_txt);
+      mRecycleView = view.findViewById(R.id.media_recycleview);
+      mRecycleView.setHasFixedSize(true);
+      mLoadingView = view.findViewById(R.id.loading);
+      GridLayoutManager gridLayoutManager = new HackyGridLayoutManager(getActivity(), GRID_COUNT);
+      gridLayoutManager.setSmoothScrollbarEnabled(true);
+      mRecycleView.setLayoutManager(gridLayoutManager);
+      mRecycleView.addItemDecoration(new SpacesItemDecoration(getResources().getDimensionPixelOffset(R.dimen.boxing_media_margin), GRID_COUNT));
+      mRecycleView.setAdapter(mMediaAdapter);
+      mRecycleView.addOnScrollListener(new ScrollListener());
+      mMediaAdapter.setOnMediaClickListener(new OnMediaClickListener());
+      mMediaAdapter.setOnCameraClickListener(new OnCameraClickListener());
+      view.findViewById(R.id.finish_txt).setOnClickListener(this);
+   }
 
+   @Override
+   public void onCameraActivityResult(int requestCode, int resultCode) {
+      showProgressDialog();
+      super.onCameraActivityResult(requestCode, resultCode);
+   }
 
-    @Override
-    public void onCameraActivityResult(int requestCode, int resultCode) {
-        showProgressDialog();
-        super.onCameraActivityResult(requestCode, resultCode);
-    }
+   private void showProgressDialog() {
+      if (mDialog == null) {
+         mDialog = new ProgressDialog(getActivity());
+         mDialog.setIndeterminate(true);
+         mDialog.setMessage(getString(R.string.boxing_handling));
+      }
+      if (!mDialog.isShowing()) {
+         mDialog.show();
+      }
+   }
 
-    private void showProgressDialog() {
-        if (mDialog == null) {
-            mDialog = new ProgressDialog(getActivity());
-            mDialog.setIndeterminate(true);
-            mDialog.setMessage(getString(R.string.boxing_handling));
-        }
-        if (!mDialog.isShowing()) {
-            mDialog.show();
-        }
-    }
+   private void dismissProgressDialog() {
+      if (mDialog != null && mDialog.isShowing()) {
+         mDialog.hide();
+         mDialog.dismiss();
+      }
+   }
 
-    private void dismissProgressDialog() {
-        if (mDialog != null && mDialog.isShowing()) {
-            mDialog.hide();
-            mDialog.dismiss();
-        }
-    }
+   @Override
+   public void showMedia(List<BaseMedia> medias, int count) {
+      if (medias == null || isEmptyData(medias)
+          && isEmptyData(mMediaAdapter.getAllMedias())) {
+         showEmptyData();
+         return;
+      }
+      showData();
+      mMediaAdapter.addAllData(medias);
+   }
 
+   private boolean isEmptyData(List<BaseMedia> medias) {
+      return medias.isEmpty() && !BoxingManager.getInstance().getBoxingConfig().isNeedCamera();
+   }
 
-    @Override
-    public void showMedia(List<BaseMedia> medias, int count) {
-        if (medias == null || isEmptyData(medias)
-                && isEmptyData(mMediaAdapter.getAllMedias())) {
+   private void showEmptyData() {
+      mEmptyTxt.setVisibility(View.VISIBLE);
+      mRecycleView.setVisibility(View.GONE);
+      mLoadingView.setVisibility(View.GONE);
+   }
+
+   private void showData() {
+      mLoadingView.setVisibility(View.GONE);
+      mEmptyTxt.setVisibility(View.GONE);
+      mRecycleView.setVisibility(View.VISIBLE);
+   }
+
+   @Override
+   public void onCameraFinish(BaseMedia media) {
+      dismissProgressDialog();
+      mIsCamera = false;
+      if (media != null) {
+         List<BaseMedia> selectedMedias = mMediaAdapter.getSelectedMedias();
+         selectedMedias.add(media);
+         BoxingBottomSheetFragment.this.onFinish(selectedMedias);
+      }
+   }
+
+   @Override
+   public void onCameraError() {
+      mIsCamera = false;
+      dismissProgressDialog();
+   }
+
+   @Override
+   public void startLoading() {
+      loadMedias();
+   }
+
+   @Override
+   public void onRequestPermissionError(String[] permissions, Exception e) {
+      if (permissions.length > 0) {
+         if (permissions[0].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             showEmptyData();
-            return;
-        }
-        showData();
-        mMediaAdapter.addAllData(medias);
-    }
+            Toast.makeText(getContext(), R.string.boxing_storage_permission_deny, Toast.LENGTH_SHORT).show();
+         }
+      }
+   }
 
-    private boolean isEmptyData(List<BaseMedia> medias) {
-        return medias.isEmpty() && !BoxingManager.getInstance().getBoxingConfig().isNeedCamera();
-    }
+   @Override
+   public void onRequestPermissionSuc(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+      if (permissions[0].equals(STORAGE_PERMISSIONS[0])) {
+         startLoading();
+      }
+   }
 
-    private void showEmptyData() {
-        mEmptyTxt.setVisibility(View.VISIBLE);
-        mRecycleView.setVisibility(View.GONE);
-        mLoadingView.setVisibility(View.GONE);
-    }
+   @Override
+   public void clearMedia() {
+      mMediaAdapter.clearData();
+   }
 
-    private void showData() {
-        mLoadingView.setVisibility(View.GONE);
-        mEmptyTxt.setVisibility(View.GONE);
-        mRecycleView.setVisibility(View.VISIBLE);
-    }
+   @Override
+   public void onClick(View v) {
+      int id = v.getId();
+      if (R.id.finish_txt == id) {
+         onFinish(null);
+      }
+   }
 
-    @Override
-    public void onCameraFinish(BaseMedia media) {
-        dismissProgressDialog();
-        mIsCamera = false;
-        if (media != null) {
-            List<BaseMedia> selectedMedias = mMediaAdapter.getSelectedMedias();
-            selectedMedias.add(media);
-            BoxingBottomSheetFragment.this.onFinish(selectedMedias);
-        }
-    }
+   private class OnMediaClickListener implements View.OnClickListener {
 
-    @Override
-    public void onCameraError() {
-        mIsCamera = false;
-        dismissProgressDialog();
-    }
+      @Override
+      public void onClick(View v) {
+         ArrayList<BaseMedia> iMedias = new ArrayList<>();
+         BaseMedia media = (BaseMedia) v.getTag();
+         iMedias.add(media);
+         onFinish(iMedias);
+      }
+   }
 
-    @Override
-    public void startLoading() {
-        loadMedias();
-    }
+   private class OnCameraClickListener implements View.OnClickListener {
 
-    @Override
-    public void onRequestPermissionError(String[] permissions, Exception e) {
-        if (permissions.length > 0) {
-            if (permissions[0].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                showEmptyData();
-                Toast.makeText(getContext(), R.string.boxing_storage_permission_deny, Toast.LENGTH_SHORT).show();
+      @Override
+      public void onClick(View v) {
+         if (!mIsCamera) {
+            mIsCamera = true;
+            startCamera(getActivity(), BoxingBottomSheetFragment.this, BoxingFileHelper.DEFAULT_SUB_DIR);
+         }
+      }
+   }
+
+   private class ScrollListener extends RecyclerView.OnScrollListener {
+
+      @Override
+      public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+         final int childCount = recyclerView.getChildCount();
+         if (childCount > 0) {
+            View lastChild = recyclerView.getChildAt(childCount - 1);
+            RecyclerView.Adapter outerAdapter = recyclerView.getAdapter();
+            int lastVisible = recyclerView.getChildAdapterPosition(lastChild);
+            if (lastVisible == outerAdapter.getItemCount() - 1 && hasNextPage() && canLoadNextPage()) {
+               onLoadNextPage();
             }
-        }
-    }
-
-    @Override
-    public void onRequestPermissionSuc(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (permissions[0].equals(STORAGE_PERMISSIONS[0])) {
-            startLoading();
-        }
-    }
-
-
-    @Override
-    public void clearMedia() {
-        mMediaAdapter.clearData();
-    }
-
-
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        if (R.id.finish_txt == id) {
-            onFinish(null);
-        }
-    }
-
-
-    private class OnMediaClickListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View v) {
-            ArrayList<BaseMedia> iMedias = new ArrayList<>();
-            BaseMedia media = (BaseMedia) v.getTag();
-            iMedias.add(media);
-            onFinish(iMedias);
-        }
-    }
-
-    private class OnCameraClickListener implements View.OnClickListener {
-
-        @Override
-        public void onClick(View v) {
-            if (!mIsCamera) {
-                mIsCamera = true;
-                startCamera(getActivity(), BoxingBottomSheetFragment.this, BoxingFileHelper.DEFAULT_SUB_DIR);
-            }
-        }
-    }
-
-    private class ScrollListener extends RecyclerView.OnScrollListener {
-
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            final int childCount = recyclerView.getChildCount();
-            if (childCount > 0) {
-                View lastChild = recyclerView.getChildAt(childCount - 1);
-                RecyclerView.Adapter outerAdapter = recyclerView.getAdapter();
-                int lastVisible = recyclerView.getChildAdapterPosition(lastChild);
-                if (lastVisible == outerAdapter.getItemCount() - 1 && hasNextPage() && canLoadNextPage()) {
-                    onLoadNextPage();
-                }
-            }
-        }
-    }
-
+         }
+      }
+   }
 }

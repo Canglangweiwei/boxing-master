@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~  Copyright (C) 2017 Bilibili
   ~
   ~  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,17 +15,16 @@
   ~
   -->
 
-<TextView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/empty_txt"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_gravity="center"
-    android:layout_weight="1"
-    android:drawablePadding="4dp"
-    android:gravity="center"
-    android:text="@string/boxing_nothing_found"
-    android:textColor="@color/boxing_black"
-    android:visibility="gone"
-    tools:visibility="visible"/>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:tools="http://schemas.android.com/tools"
+   android:id="@+id/empty_txt"
+   android:layout_width="match_parent"
+   android:layout_height="0dp"
+   android:layout_gravity="center"
+   android:layout_weight="1"
+   android:drawablePadding="4dp"
+   android:gravity="center"
+   android:text="@string/boxing_nothing_found"
+   android:textColor="@color/boxing_black"
+   android:visibility="gone"
+   tools:visibility="visible" />

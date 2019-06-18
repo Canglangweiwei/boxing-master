@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~  Copyright (C) 2017 Bilibili
   ~
   ~  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,19 +16,19 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/camera_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/boxing_black"
-                android:foreground="?android:selectableItemBackground"
-                android:minHeight="100dp"
-                android:minWidth="100dp">
+   android:id="@+id/camera_layout"
+   android:layout_width="match_parent"
+   android:layout_height="wrap_content"
+   android:background="@color/boxing_black"
+   android:foreground="?android:selectableItemBackground"
+   android:minHeight="100dp"
+   android:minWidth="100dp">
 
-    <ImageView
-        android:id="@+id/camera_img"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:textColor="@color/boxing_white"
-        android:textSize="14sp"/>
+   <ImageView
+      android:id="@+id/camera_img"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="true"
+      android:textColor="@color/boxing_white"
+      android:textSize="14sp" />
 </RelativeLayout>

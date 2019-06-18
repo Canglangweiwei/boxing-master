@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~  Copyright (C) 2017 Bilibili
   ~
   ~  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,17 +16,17 @@
   -->
 
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
-       android:shape="oval">
+   android:shape="oval">
 
-    <solid android:color="@color/boxing_colorPrimaryAlpha"/>
+   <solid android:color="@color/boxing_colorPrimaryAlpha" />
 
-    <stroke
-        android:width="0.3dp"
-        android:color="@color/boxing_white"/>
+   <stroke
+      android:width="0.3dp"
+      android:color="@color/boxing_white" />
 
-    <size
-        android:width="18dp"
-        android:height="18dp"/>
+   <size
+      android:width="18dp"
+      android:height="18dp" />
 
 
 </shape>

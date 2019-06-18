@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~  Copyright (C) 2017 Bilibili
   ~
   ~  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,11 +16,9 @@
   -->
 
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
+   android:shape="rectangle">
 
-    <corners
-        android:radius="@dimen/boxing_corner_radius" />
-    <solid
-        android:color="#fafafa" />
+   <corners android:radius="@dimen/boxing_corner_radius" />
+   <solid android:color="#fafafa" />
 
 </shape>
